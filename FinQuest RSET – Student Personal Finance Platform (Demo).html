@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinQuest RSET – Student Personal Finance Platform (Demo)</title>
+<style>
+:root{
+  --bg:#12152b;--panel:#1b1f3b;--panel2:#252a4f;--line:#323865;
+  --text:#f2f3fa;--muted:#9aa0c7;--mint:#14c38e;--amber:#ffb020;--coral:#ff5c7a;--violet:#6c63ff;--cyan:#2ec4f1;
+  --r:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);font-size:15px}
+button,input,select,textarea{font:inherit}
+a{color:var(--cyan)}
+header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:12px 20px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.logo{font-weight:800;font-size:20px;letter-spacing:.3px}
+.logo span{color:var(--mint)}
+.grow{flex:1}
+.pill{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);border-radius:999px;padding:5px 12px;font-size:13px;color:var(--muted)}
+.pill b{color:var(--text)}
+.seg{display:flex;background:var(--panel2);border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;color:var(--muted);padding:6px 14px;border-radius:999px;cursor:pointer;font-weight:600}
+.seg button.on{background:var(--mint);color:#10131f}
+.layout{display:flex;min-height:calc(100vh - 62px)}
+nav{width:230px;background:var(--panel);border-right:1px solid var(--line);padding:14px 10px;flex-shrink:0}
+nav button{display:flex;width:100%;gap:10px;align-items:center;text-align:left;border:0;background:transparent;color:var(--muted);padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:600;margin-bottom:2px}
+nav button:hover{background:var(--panel2);color:var(--text)}
+nav button.on{background:var(--panel2);color:var(--text);box-shadow:inset 3px 0 0 var(--mint)}
+nav .num{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11px;background:var(--line);color:var(--text);flex-shrink:0}
+nav .sep{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:14px 12px 6px}
+main{flex:1;padding:22px;max-width:1200px}
+h1{font-size:24px;margin:0 0 4px}
+h2{font-size:18px;margin:0 0 12px}
+h3{font-size:15px;margin:0 0 8px}
+.sub{color:var(--muted);margin:0 0 18px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.stat .v{font-size:28px;font-weight:800}
+.stat .l{color:var(--muted);font-size:13px}
+.btn{border:0;border-radius:10px;padding:9px 16px;font-weight:700;cursor:pointer;background:var(--mint);color:#10131f}
+.btn.sec{background:var(--panel2);color:var(--text)}
+.btn.warn{background:var(--amber)}
+.btn.bad{background:var(--coral);color:#fff}
+.btn.vio{background:var(--violet);color:#fff}
+.btn.sm{padding:6px 10px;font-size:13px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input,select,textarea{background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:9px 12px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--mint)}
+label{font-size:13px;color:var(--muted);display:block;margin-bottom:4px}
+.field{margin-bottom:12px}
+.field input,.field select{width:100%}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+tr.click{cursor:pointer}
+tr.click:hover{background:var(--panel2)}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:700}
+.t-need{background:#14c38e22;color:var(--mint)}
+.t-want{background:#ffb02022;color:var(--amber)}
+.t-bad{background:#ff5c7a22;color:var(--coral)}
+.t-ok{background:#14c38e22;color:var(--mint)}
+.t-vio{background:#6c63ff33;color:#aaa6ff}
+.alert{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:12px;margin-bottom:10px;background:var(--panel2)}
+.alert .ic{font-size:18px;line-height:1}
+.alert.bad{border-left:4px solid var(--coral)}
+.alert.warn{border-left:4px solid var(--amber)}
+.alert.ok{border-left:4px solid var(--mint)}
+.alert.info{border-left:4px solid var(--violet)}
+.prog{height:10px;background:var(--bg);border-radius:999px;overflow:hidden}
+.prog>div{height:100%;background:var(--mint);border-radius:999px}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.big{font-size:40px;font-weight:800}
+.gamecard{background:var(--panel2);border-radius:16px;padding:24px;text-align:center}
+.feedback{margin-top:14px;padding:12px;border-radius:12px;background:var(--bg);text-align:left}
+.chat{height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:6px}
+.msg{max-width:78%;padding:10px 14px;border-radius:14px;line-height:1.45;white-space:pre-wrap}
+.msg.me{align-self:flex-end;background:var(--mint);color:#10131f;border-bottom-right-radius:4px}
+.msg.bot{align-self:flex-start;background:var(--panel2);border-bottom-left-radius:4px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.chip{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:999px;padding:6px 12px;cursor:pointer;font-size:13px}
+.chip:hover{border-color:var(--mint)}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--mint);color:#10131f;padding:12px 18px;border-radius:12px;font-weight:700;box-shadow:0 8px 24px #0006;z-index:20;transition:opacity .3s}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-bottom:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+svg text{fill:var(--muted);font-size:11px}
+.lvl{background:linear-gradient(90deg,var(--mint),var(--cyan));height:8px;border-radius:999px}
+@media (max-width:820px){
+  .layout{flex-direction:column}
+  nav{width:100%;display:flex;overflow-x:auto;padding:8px;border-right:0;border-bottom:1px solid var(--line)}
+  nav button{width:auto;white-space:nowrap}
+  nav .sep{display:none}
+  main{padding:14px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Fin<span>Quest</span> RSET</div>
+  <div class="seg" id="roleSeg">
+    <button data-role="student">Student</button>
+    <button data-role="teacher">Teacher / Mentor</button>
+  </div>
+  <div class="grow"></div>
+  <div id="hdrRight" class="row"></div>
+</header>
+<div class="layout">
+  <nav id="nav"></nav>
+  <main id="main"></main>
+</div>
+<div id="toast" class="toast" style="opacity:0;pointer-events:none"></div>
+
+<script>
+/* =========================================================
+   FinQuest RSET – demo of a student personal-finance platform
+   Plain HTML + CSS + JavaScript. Data is kept in the browser.
+   ========================================================= */
+
+// ---------- constants ----------
+const OUT_CATS = {
+  food:{label:'Food (mess/canteen)',need:'need'}, delivery:{label:'Food delivery',need:'want'},
+  travel:{label:'Travel',need:'need'}, recharge:{label:'Recharge & OTT',need:'need'},
+  academics:{label:'Academics',need:'need'}, shopping:{label:'Shopping',need:'want'},
+  fun:{label:'Fun & outings',need:'want'}, bnpl:{label:'BNPL / EMI',need:'want'}, other:{label:'Other',need:'want'}
+};
+const IN_CATS = {allowance:'Allowance',scholarship:'Scholarship',stipend:'Stipend',internship:'Internship',parttime:'Part-time / freelance',gift:'Gift',other:'Other income'};
+const KEYWORDS = [
+  ['delivery',['zomato','swiggy','delivery','order','dominos','pizza','kfc','mcd','burger']],
+  ['food',['chai','tea','coffee','puffs','snack','canteen','mess','lunch','dinner','breakfast','meal','juice','biryani','food']],
+  ['travel',['bus','auto','metro','train','uber','ola','petrol','fuel','cab','ticket','travel']],
+  ['recharge',['recharge','data','jio','airtel','vi ','netflix','spotify','prime','hotstar','ott','wifi']],
+  ['academics',['book','xerox','print','fee','fees','exam','lab','course','stationery','pen','record','notes']],
+  ['bnpl',['emi','bnpl','paylater','pay later','loan','simpl','lazypay']],
+  ['shopping',['shirt','shoe','shoes','sneaker','amazon','flipkart','myntra','meesho','dress','jeans','watch','bag']],
+  ['fun',['movie','game','gaming','party','trip','outing','treat','cafe','concert','bowling','top-up','topup','pubg','bgmi']],
+];
+const IN_KEYWORDS = [
+  ['allowance',['allowance','pocket','parents','dad','mom','amma','achan','home']],
+  ['scholarship',['scholarship','e-grantz','egrantz']],
+  ['stipend',['stipend']],
+  ['internship',['internship','intern']],
+  ['parttime',['freelance','tuition','part-time','parttime','salary','gig']],
+  ['gift',['gift','birthday','vishu','kaineetam','onam']],
+];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const CHALLENGES = ['No food delivery for 7 days','Log every expense for 7 days','Save ₹50 a day this week','Finish the Scam Spotter game','Complete the Needs vs Wants test','Set a savings goal and save 10% of allowance'];
+const STORE_KEY = 'finquest_rset_demo_v1';
+
+// ---------- helpers ----------
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr = n => '₹' + Math.round(n).toLocaleString('en-IN');
+const uid = () => Math.random().toString(36).slice(2, 9);
+const clamp = (v, a=0, b=100) => Math.max(a, Math.min(b, v));
+const today = new Date();
+const iso = d => d.toISOString().slice(0, 10);
+const monthKey = d => (typeof d === 'string' ? d.slice(0, 7) : iso(d).slice(0, 7));
+const mLabel = k => MONTHS[+k.slice(5, 7) - 1] + ' ' + k.slice(2, 4);
+function toast(t){ const el = $('#toast'); el.textContent = t; el.style.opacity = 1; clearTimeout(el._t); el._t = setTimeout(()=>el.style.opacity = 0, 2200); }
+
+// ---------- demo data ----------
+function seedTxns(profile){
+  // profile: {allowance, deliveryPerMonth, shopping, fun, bnpl, extraIn}
+  const txns = [];
+  const add = (date, type, amt, cat, desc, mode='UPI') => txns.push({id:uid(), date, type, amt, cat, need: type==='in' ? '' : OUT_CATS[cat].need, desc, mode});
+  let seed = profile.seed;
+  const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+  for (let m = 7; m >= 0; m--){
+    const d0 = new Date(today.getFullYear(), today.getMonth() - m, 1);
+    const days = m === 0 ? today.getDate() : new Date(d0.getFullYear(), d0.getMonth() + 1, 0).getDate();
+    const day = n => iso(new Date(d0.getFullYear(), d0.getMonth(), Math.min(n, days), 12));
+    add(day(1), 'in', profile.allowance, 'allowance', 'Monthly allowance from home', 'Bank');
+    if (profile.extraIn && m % 3 === 1) add(day(5), 'in', profile.extraIn[1], profile.extraIn[0], profile.extraIn[2], 'Bank');
+    add(day(2), 'out', Math.round(profile.allowance * 0.28 / 100) * 100, 'food', 'Mess bill', 'UPI');
+    add(day(3), 'out', 299, 'recharge', 'Mobile recharge', 'UPI');
+    for (let i = 0; i < Math.round(days / 3); i++) add(day(1 + i * 3), 'out', 20 + Math.round(rnd() * 40), 'food', ['Chai and puffs','Canteen snacks','Juice'][i % 3], 'UPI');
+    for (let i = 0; i < Math.round(days / 4); i++) add(day(2 + i * 4), 'out', 25 + Math.round(rnd() * 30), 'travel', 'Bus fare', 'Cash');
+    const del = Math.round(profile.deliveryPerMonth * days / 30);
+    for (let i = 0; i < del; i++) add(day(2 + Math.floor(i * days / Math.max(del,1))), 'out', 160 + Math.round(rnd() * 140), 'delivery', ['Zomato biryani','Swiggy order','Domino\'s pizza'][i % 3], 'UPI');
+    if (rnd() < 0.7) add(day(10), 'out', profile.shopping * (0.6 + rnd() * 0.8), 'shopping', ['Sneakers','Myntra order','Amazon sale'][m % 3], 'UPI');
+    add(day(15), 'out', profile.fun * (0.6 + rnd() * 0.8), 'fun', ['Movie with friends','Game top-up','Weekend outing'][m % 3], 'UPI');
+    if (m % 2 === 0) add(day(12), 'out', 150 + Math.round(rnd() * 250), 'academics', 'Xerox and records', 'Cash');
+    if (profile.bnpl) add(day(5), 'out', profile.bnpl, 'bnpl', 'Phone EMI', 'Card');
+  }
+  txns.forEach(t => t.amt = Math.round(t.amt));
+  return txns.sort((a, b) => b.date.localeCompare(a.date));
+}
+function makeStudent(o){
+  return Object.assign({
+    id: uid(), name:'', regNo:'', branch:'CSE', year:1, residence:'Hostel', allowance:8000, openingBalance:2000,
+    mentor:'Dr. Mentor', phone:'', email:'', custom:[],
+    budgets:{food:2800, delivery:1200, travel:800, recharge:400, academics:600, shopping:1000, fun:800},
+    goals:[], txns:[], xp:0, games:{scam:null, swipe:null, nowlater:null, needwant:null, quiz:null},
+    inbox:[], chat:[], lastActive: iso(today)
+  }, o);
+}
+function demoState(){
+  const s1 = makeStudent({name:'Anu Mathew', regNo:'U2509011', branch:'CSE', year:1, residence:'Hostel', allowance:8000, openingBalance:1500, xp:340,
+    custom:[{k:'Interests',v:'Gaming, music'}], goals:[{id:uid(),name:'New laptop',target:45000,saved:6200},{id:uid(),name:'IV trip',target:6000,saved:2500}]});
+  s1.txns = seedTxns({seed:7, allowance:8000, deliveryPerMonth:11, shopping:1200, fun:900, bnpl:0});
+  s1.games.scam = 50;
+  const s2 = makeStudent({name:'Rahul Nair', regNo:'U2408023', branch:'Mechanical', year:2, residence:'Day scholar', allowance:6000, openingBalance:12500, xp:150,
+    goals:[{id:uid(),name:'Bike service fund',target:5000,saved:600}]});
+  s2.budgets = {food:1800, delivery:600, travel:1200, recharge:350, academics:500, shopping:700, fun:600};
+  s2.txns = seedTxns({seed:23, allowance:6000, deliveryPerMonth:7, shopping:1100, fun:900, bnpl:2000});
+  s2.games.scam = 33; s2.lastActive = iso(new Date(today.getTime() - 9 * 864e5));
+  const s3 = makeStudent({name:'Meera Joseph', regNo:'U2402044', branch:'ECE', year:2, residence:'Hostel', allowance:9000, openingBalance:4000, xp:720,
+    custom:[{k:'Scholarship',v:'E-Grantz'}], goals:[{id:uid(),name:'SIP starter fund',target:12000,saved:7800},{id:uid(),name:'Arduino kit',target:3500,saved:3500}]});
+  s3.budgets = {food:3000, delivery:600, travel:700, recharge:400, academics:800, shopping:900, fun:700};
+  s3.txns = seedTxns({seed:91, allowance:9000, deliveryPerMonth:2, shopping:600, fun:500, bnpl:0, extraIn:['scholarship', 4000, 'E-Grantz scholarship']});
+  s3.games.scam = 100; s3.games.quiz = 80;
+  return {students:[s1, s2, s3], currentId:s1.id, role:'student', tab:'dashboard', teacherTab:'class', selectedId:null,
+          teacher:{name:'Dr. Priya Varghese'}, groq:{key:'', model:'llama-3.3-70b-versatile'}};
+}
+
+// ---------- persistence (browser storage may be unavailable) ----------
+let S;
+try { S = JSON.parse(localStorage.getItem(STORE_KEY)) || demoState(); } catch(e){ S = demoState(); }
+function save(){ try { const c = Object.assign({}, S, {groq:{key:'', model:S.groq.model}}); localStorage.setItem(STORE_KEY, JSON.stringify(c)); } catch(e){} }
+const cur = () => S.students.find(s => s.id === S.currentId) || S.students[0];
+
+// ---------- analytics ----------
+function semesterOf(st, dateStr){
+  // odd sems Jul–Dec, even sems Jan–Jun; current academic year = student's year
+  const d = new Date(dateStr), acadNow = today.getMonth() >= 6 ? today.getFullYear() : today.getFullYear() - 1;
+  const start = acadNow - (st.year - 1); // July of the student's first year
+  const months = (d.getFullYear() - start) * 12 + d.getMonth() - 6;
+  if (months < 0) return null;
+  const n = Math.floor(months / 6) + 1;
+  const sy = start + Math.floor((n - 1) / 2);
+  return {n, label:`S${n} (${n % 2 ? 'Jul–Dec ' + sy : 'Jan–Jun ' + (sy + 1)})`};
+}
+function analyze(st){
+  const mk = monthKey(today);
+  const tx = st.txns;
+  const allIn = tx.filter(t => t.type === 'in').reduce((a, t) => a + t.amt, 0);
+  const allOut = tx.filter(t => t.type === 'out').reduce((a, t) => a + t.amt, 0);
+  const balance = st.openingBalance + allIn - allOut;
+  const mt = tx.filter(t => monthKey(t.date) === mk);
+  const mIn = mt.filter(t => t.type === 'in').reduce((a, t) => a + t.amt, 0);
+  const mOutT = mt.filter(t => t.type === 'out');
+  const mOut = mOutT.reduce((a, t) => a + t.amt, 0);
+  const byCat = {};
+  mOutT.forEach(t => byCat[t.cat] = (byCat[t.cat] || 0) + t.amt);
+  const cats = Object.entries(byCat).map(([c, v]) => ({c, label:OUT_CATS[c]?.label || c, v})).sort((a, b) => b.v - a.v);
+  const wants = mOutT.filter(t => t.need === 'want').reduce((a, t) => a + t.amt, 0);
+  const impulse = mOut ? wants / mOut : 0;
+  const savingsRate = mIn ? (mIn - mOut) / mIn : 0;
+  const budgeted = Object.entries(st.budgets).filter(([, b]) => b > 0);
+  const over = budgeted.filter(([c, b]) => (byCat[c] || 0) > b).map(([c, b]) => ({c, label:OUT_CATS[c].label, spent:byCat[c], b}));
+  const discipline = budgeted.length ? 1 - over.length / budgeted.length : 1;
+  const bnpl = byCat.bnpl || 0;
+  const deliveryCount = mOutT.filter(t => t.cat === 'delivery').length;
+  // monthly series
+  const months = [];
+  for (let i = 5; i >= 0; i--) months.push(monthKey(new Date(today.getFullYear(), today.getMonth() - i, 1)));
+  const series = months.map(k => {
+    const t = tx.filter(x => monthKey(x.date) === k);
+    const bySrc = {};
+    t.filter(x => x.type === 'in').forEach(x => bySrc[x.cat] = (bySrc[x.cat] || 0) + x.amt);
+    return {k, in:t.filter(x => x.type === 'in').reduce((a, x) => a + x.amt, 0), out:t.filter(x => x.type === 'out').reduce((a, x) => a + x.amt, 0), bySrc};
+  });
+  const prev3 = series.slice(2, 5);
+  const avgOut = prev3.reduce((a, x) => a + x.out, 0) / 3 || mOut || 1;
+  const avgNet = prev3.reduce((a, x) => a + (x.in - x.out), 0) / 3;
+  const bufferMonths = balance / avgOut;
+  const sems = {};
+  tx.forEach(t => { const s = semesterOf(st, t.date); if (!s) return; sems[s.n] = sems[s.n] || {label:s.label, in:0, out:0}; sems[s.n][t.type] += t.amt; });
+  const scores = {
+    'Impulse control': clamp(100 - impulse * 150),
+    'Savings rate': clamp(savingsRate * 333),
+    'Budget discipline': clamp(discipline * 100),
+    'Debt & BNPL': clamp(100 - (mOut ? bnpl / mOut : 0) * 400),
+    'Scam awareness': st.games.scam ?? 50,
+    'Emergency buffer': clamp(bufferMonths / 3 * 100),
+  };
+  const health = Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / 6);
+  const daysIdle = Math.round((today - new Date(st.lastActive)) / 864e5);
+  const prevMonthCat = {};
+  tx.filter(t => t.type === 'out' && monthKey(t.date) === months[4]).forEach(t => prevMonthCat[t.cat] = (prevMonthCat[t.cat] || 0) + t.amt);
+  return {balance, mIn, mOut, cats, byCat, impulse, savingsRate, over, bnpl, deliveryCount, series, sems, scores, health, avgOut, avgNet, bufferMonths, daysIdle, prevMonthCat, wants,
+          dayOfMonth: today.getDate(), daysInMonth: new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate()};
+}
+function alertsFor(st, A){
+  const out = [];
+  const daysLeft = A.daysInMonth - A.dayOfMonth;
+  Object.entries(st.budgets).forEach(([c, b]) => {
+    if (!b) return; const sp = A.byCat[c] || 0, p = sp / b;
+    if (p >= 1) out.push({lvl:'bad', ic:'⛔', t:`${OUT_CATS[c].label}: budget crossed`, d:`${inr(sp)} spent of ${inr(b)} (${Math.round(p*100)}%) with ${daysLeft} days left.`});
+    else if (p >= .8) out.push({lvl:'warn', ic:'⚠️', t:`${OUT_CATS[c].label}: 80% used`, d:`${inr(sp)} of ${inr(b)} used with ${daysLeft} days left.`});
+    else if (p >= .5 && A.dayOfMonth < 15) out.push({lvl:'info', ic:'ℹ️', t:`${OUT_CATS[c].label}: half the budget gone early`, d:`${inr(sp)} of ${inr(b)} used by day ${A.dayOfMonth}.`});
+  });
+  if (A.deliveryCount >= 6) { const amt = A.byCat.delivery || 0; out.push({lvl:'warn', ic:'🍔', t:`Food delivery ${A.deliveryCount} times this month`, d:`That is ${inr(amt)}. Swapping half of these for mess food keeps about ${inr(amt/2)} in your pocket.`}); }
+  if (A.bnpl > 0) out.push({lvl:'bad', ic:'💳', t:'BNPL / EMI payments running', d:`${inr(A.bnpl)} this month goes to EMIs. Avoid adding new Pay Later purchases until this is cleared.`});
+  if (A.balance < 1000) out.push({lvl:'bad', ic:'🪫', t:'Low balance', d:`Only ${inr(A.balance)} left. Pause wants until your next inflow.`});
+  if (A.impulse > .4) out.push({lvl:'warn', ic:'🛍️', t:'High share of wants', d:`${Math.round(A.impulse*100)}% of this month's spending is on wants. A healthy target is about 30%.`});
+  if ((st.games.scam ?? 0) < 60) out.push({lvl:'info', ic:'🛡️', t:'Scam check pending', d:'Play Scam Spotter in the Mind Games Arcade to protect your UPI account.'});
+  if (!out.length) out.push({lvl:'ok', ic:'✅', t:'All good', d:'You are within all budgets this month. Keep the streak going.'});
+  return out;
+}
+function adviceFor(st, A){
+  const a = [];
+  const top = A.cats.find(c => OUT_CATS[c.c]?.need === 'want') || A.cats[0];
+  if (A.health < 50) a.push(`Overall Money Health Score is ${A.health}/100 (at risk). Schedule a one-to-one money check-in.`);
+  if (top) a.push(`Biggest discretionary spending this month: ${top.label} at ${inr(top.v)} (${Math.round(top.v / A.mOut * 100)}% of spending).`);
+  if (A.impulse > .4) a.push(`Wants are ${Math.round(A.impulse*100)}% of spending. Suggest the "No food delivery for 7 days" challenge and the Needs vs Wants test.`);
+  if (A.savingsRate < .05) a.push(`Saving only ${Math.max(0, Math.round(A.savingsRate*100))}% of inflow. Suggest saving ₹50 a day (₹9,100 a semester).`);
+  if (A.bnpl > 0) a.push(`Pays ${inr(A.bnpl)} a month in EMI/BNPL. Discuss avoiding new credit until it is cleared.`);
+  if (A.over.length) a.push(`Over budget in: ${A.over.map(o => o.label).join(', ')}.`);
+  if ((st.games.scam ?? 0) < 60) a.push('Low scam awareness score. Assign the Scam Spotter game.');
+  if (A.daysIdle > 6) a.push(`No activity for ${A.daysIdle} days. Send a nudge to log expenses.`);
+  if (A.bufferMonths < 1) a.push(`Emergency buffer covers under one month of spending (${A.bufferMonths.toFixed(1)} months).`);
+  if (!a.length || A.health >= 75) a.push('Doing well. Recognise progress and suggest a stretch goal (e.g. start an SIP or a bigger saving goal).');
+  return a;
+}
+const level = xp => ({n: Math.floor(xp / 200) + 1, name: ['Rookie Saver','Rookie Saver','Budget Boss','Budget Boss','Money Ninja','Money Ninja','Project Rookie','Grant Master'][Math.min(7, Math.floor(xp / 200))], pct: (xp % 200) / 2});
+function addXP(n, why){ const st = cur(); st.xp += n; st.lastActive = iso(today); save(); toast(`+${n} XP · ${why}`); }
+function streak(st){
+  const days = new Set(st.txns.map(t => t.date)); let n = 0;
+  for (let i = 0; i < 60; i++){ if (days.has(iso(new Date(today.getTime() - i * 864e5)))) n++; else if (i > 0) break; }
+  return n;
+}
+
+// ---------- tiny SVG charts ----------
+function hBars(items, color='#14c38e', w=520, hi){
+  if (!items.length) return '<p class="muted">No spending logged this month yet.</p>';
+  const max = Math.max(...items.map(i => i.v)), rh = 30, lw = 150, h = items.length * rh + 6;
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%">${items.map((it, i) => {
+    const bw = (w - lw - 80) * it.v / max, y = i * rh + 4;
+    return `<text x="${lw - 8}" y="${y + 17}" text-anchor="end">${esc(it.label)}</text>
+      <rect x="${lw}" y="${y + 4}" width="${Math.max(2, bw)}" height="18" rx="5" fill="${(hi ? it.c === hi : i === 0) ? '#ff5c7a' : color}"/>
+      <text x="${lw + bw + 6}" y="${y + 17}" style="fill:#f2f3fa;font-weight:600">${inr(it.v)}</text>`;}).join('')}</svg>`;
+}
+function lineChart(labels, series, w=520, h=220){
+  const all = series.flatMap(s => s.values), max = Math.max(1, ...all) * 1.1, pl = 50, pb = 26, pt = 10;
+  const X = i => pl + i * (w - pl - 16) / Math.max(1, labels.length - 1), Y = v => pt + (h - pt - pb) * (1 - v / max);
+  const ticks = [0, .5, 1].map(f => max * f / 1.1);
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%">
+    ${ticks.map(t => `<line x1="${pl}" x2="${w-10}" y1="${Y(t)}" y2="${Y(t)}" stroke="#323865"/><text x="${pl-6}" y="${Y(t)+4}" text-anchor="end">${t >= 1000 ? Math.round(t/1000)+'k' : Math.round(t)}</text>`).join('')}
+    ${labels.map((l, i) => `<text x="${X(i)}" y="${h-6}" text-anchor="middle">${esc(l)}</text>`).join('')}
+    ${series.map(s => `<polyline fill="none" stroke="${s.color}" stroke-width="${s.bold ? 3 : 2}" points="${s.values.map((v, i) => X(i)+','+Y(v)).join(' ')}"/>
+      ${s.values.map((v, i) => `<circle cx="${X(i)}" cy="${Y(v)}" r="${s.bold ? 4 : 3}" fill="${s.color}"/>`).join('')}`).join('')}
+  </svg>`;
+}
+function groupBars(labels, a, b, w=520, h=230){
+  const max = Math.max(1, ...a, ...b) * 1.15, pl = 10, pb = 34, gw = (w - pl * 2) / Math.max(1, labels.length), bw = Math.min(40, gw / 3);
+  const Y = v => (h - pb) * (1 - v / max);
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%">
+    <line x1="0" x2="${w}" y1="${h-pb}" y2="${h-pb}" stroke="#323865"/>
+    ${labels.map((l, i) => { const cx = pl + gw * i + gw / 2; return `
+      <rect x="${cx - bw - 2}" y="${Y(a[i])}" width="${bw}" height="${h - pb - Y(a[i])}" rx="4" fill="#14c38e"/>
+      <rect x="${cx + 2}" y="${Y(b[i])}" width="${bw}" height="${h - pb - Y(b[i])}" rx="4" fill="#ff5c7a"/>
+      <text x="${cx - bw/2 - 2}" y="${Y(a[i]) - 4}" text-anchor="middle" style="font-size:10px">${Math.round(a[i]/1000)}k</text>
+      <text x="${cx + bw/2 + 2}" y="${Y(b[i]) - 4}" text-anchor="middle" style="font-size:10px">${Math.round(b[i]/1000)}k</text>
+      <text x="${cx}" y="${h-18}" text-anchor="middle" style="fill:#f2f3fa">${esc(l.split(' ')[0])}</text>
+      <text x="${cx}" y="${h-5}" text-anchor="middle" style="font-size:10px">${esc(l.split(' ').slice(1).join(' ').replace(/[()]/g,''))}</text>`; }).join('')}
+  </svg>`;
+}
+function radar(scores, size=320){
+  const keys = Object.keys(scores), n = keys.length, c = size / 2, r = size / 2 - 60;
+  const pt = (i, v) => { const a = -Math.PI / 2 + i * 2 * Math.PI / n; return [c + Math.cos(a) * r * v / 100, c + Math.sin(a) * r * v / 100]; };
+  const ring = f => keys.map((_, i) => pt(i, f).join(',')).join(' ');
+  return `<svg viewBox="0 0 ${size} ${size}" width="100%" style="max-width:${size+40}px">
+    ${[25,50,75,100].map(f => `<polygon points="${ring(f)}" fill="none" stroke="#323865"/>`).join('')}
+    ${keys.map((_, i) => { const [x, y] = pt(i, 100); return `<line x1="${c}" y1="${c}" x2="${x}" y2="${y}" stroke="#323865"/>`; }).join('')}
+    <polygon points="${keys.map((k, i) => pt(i, scores[k]).join(',')).join(' ')}" fill="#14c38e55" stroke="#14c38e" stroke-width="2"/>
+    ${keys.map((k, i) => { const [x, y] = pt(i, 122); return `<text x="${x}" y="${y}" text-anchor="middle" style="font-size:11px;fill:#f2f3fa">${esc(k)}</text><text x="${x}" y="${y+13}" text-anchor="middle">${Math.round(scores[k])}</text>`; }).join('')}
+  </svg>`;
+}
+
+// ---------- navigation ----------
+const STUDENT_TABS = [
+  ['dashboard','6','Money Dashboard'],['arcade','1','Mind Games Arcade'],['tracker','2','Snap Tracker'],['radar','3','Risk Radar'],
+  ['alerts','4','Smart Alerts'],['learn','5','Learn Bytes'],['whatif','7','What-If Simulator'],['mentor','8','AI Financial Mentor'],
+  ['profile','👤','My Profile']
+];
+const TEACHER_TABS = [['class','👥','Class Monitor'],['student','🔍','Student Detail'],['addstudent','➕','Add Student'],['tsettings','⚙️','Mentor Settings']];
+function renderNav(){
+  const tabs = S.role === 'student' ? STUDENT_TABS : TEACHER_TABS, active = S.role === 'student' ? S.tab : S.teacherTab;
+  $('#nav').innerHTML = `<div class="sep">${S.role === 'student' ? 'Money Mode modules' : 'Mentor tools'}</div>` +
+    tabs.map(([id, n, l]) => `<button class="${id === active ? 'on' : ''}" data-tab="${id}"><span class="num">${n}</span>${l}</button>`).join('');
+  $('#nav').querySelectorAll('button').forEach(b => b.onclick = () => { if (S.role === 'student') S.tab = b.dataset.tab; else S.teacherTab = b.dataset.tab; save(); render(); });
+  document.querySelectorAll('#roleSeg button').forEach(b => b.classList.toggle('on', b.dataset.role === S.role));
+  if (S.role === 'student'){
+    const st = cur(), lv = level(st.xp), unread = st.inbox.filter(m => m.status === 'open').length;
+    $('#hdrRight').innerHTML = `
+      <select id="whoSel">${S.students.map(s => `<option value="${s.id}" ${s.id === st.id ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select>
+      <span class="pill">🔥 <b>${streak(st)}</b>-day streak</span>
+      <span class="pill">⭐ Lv <b>${lv.n}</b> ${lv.name} · <b>${st.xp}</b> XP</span>
+      ${unread ? `<span class="pill" style="color:var(--amber)">📩 <b>${unread}</b> from mentor</span>` : ''}`;
+    $('#whoSel').onchange = e => { S.currentId = e.target.value; save(); render(); };
+  } else {
+    $('#hdrRight').innerHTML = `<span class="pill">Mentor: <b>${esc(S.teacher.name)}</b></span><span class="pill"><b>${S.students.length}</b> students</span>
+      <button class="btn sec sm" id="resetBtn">Reset demo data</button>`;
+    $('#resetBtn').onclick = e => { const b = e.target; if (!b.dataset.arm){ b.dataset.arm = 1; b.textContent = 'Click again to reset'; return; } S = demoState(); S.role = 'teacher'; save(); render(); };
+  }
+}
+document.querySelectorAll('#roleSeg button').forEach(b => b.onclick = () => { S.role = b.dataset.role; save(); render(); });
+
+function render(){
+  renderNav();
+  const views = S.role === 'student'
+    ? {dashboard:vDashboard, arcade:vArcade, tracker:vTracker, radar:vRadar, alerts:vAlerts, learn:vLearn, whatif:vWhatIf, mentor:vMentor, profile:vProfile}
+    : {class:vClass, student:vStudentDetail, addstudent:vAddStudent, tsettings:vTSettings};
+  const key = S.role === 'student' ? S.tab : S.teacherTab;
+  (views[key] || Object.values(views)[0])();
+  window.scrollTo(0, 0);
+}
+
+// =========================================================
+// STUDENT VIEWS
+// =========================================================
+function mentorInbox(st){
+  const open = st.inbox.filter(m => m.status === 'open');
+  if (!open.length) return '';
+  return `<div class="card" style="border-color:var(--amber);margin-bottom:16px"><h2>📩 From your mentor, ${esc(S.teacher.name)}</h2>
+    ${open.map(m => `<div class="alert ${m.type === 'challenge' ? 'warn' : 'info'}"><div class="ic">${m.type === 'challenge' ? '🎯' : '💬'}</div>
+      <div class="grow"><b>${m.type === 'challenge' ? 'Challenge: ' : ''}${esc(m.text)}</b><div class="small muted">${m.date}</div></div>
+      <button class="btn sm" data-done="${m.id}">${m.type === 'challenge' ? 'Mark complete (+50 XP)' : 'Got it'}</button></div>`).join('')}</div>`;
+}
+function bindInbox(){
+  document.querySelectorAll('[data-done]').forEach(b => b.onclick = () => {
+    const st = cur(), m = st.inbox.find(x => x.id === b.dataset.done); m.status = 'done'; m.doneOn = iso(today);
+    if (m.type === 'challenge') addXP(50, 'challenge completed'); else save(); render();
+  });
+}
+
+// 6. Money Dashboard
+function vDashboard(){
+  const st = cur(), A = analyze(st), lv = level(st.xp);
+  const srcKeys = Object.keys(IN_CATS).filter(k => A.series.some(m => m.bySrc[k]));
+  const srcColors = {allowance:'#2ec4f1', scholarship:'#ffb020', stipend:'#6c63ff', internship:'#ff5c7a', parttime:'#c792ea', gift:'#9aa0c7', other:'#9aa0c7'};
+  const semKeys = Object.keys(A.sems).sort((a, b) => a - b);
+  const leak = A.cats.find(c => OUT_CATS[c.c]?.need === 'want');
+  const prevTop = leak ? (A.prevMonthCat[leak.c] || 0) : 0;
+  $('#main').innerHTML = `
+    ${mentorInbox(st)}
+    <h1>Hi ${esc(st.name.split(' ')[0])} 👋</h1>
+    <p class="sub">${esc(st.branch)} · Year ${st.year} · ${esc(st.residence)} · ${MONTHS[today.getMonth()]} ${today.getFullYear()}</p>
+    <div class="grid g4" style="margin-bottom:16px">
+      <div class="card stat"><div class="l">Account balance</div><div class="v" style="color:${A.balance < 1000 ? 'var(--coral)' : 'var(--mint)'}">${inr(A.balance)}</div><div class="l">bank + UPI + cash</div></div>
+      <div class="card stat"><div class="l">Money in this month</div><div class="v">${inr(A.mIn)}</div></div>
+      <div class="card stat"><div class="l">Money out this month</div><div class="v">${inr(A.mOut)}</div><div class="l">${Math.round(A.impulse*100)}% on wants</div></div>
+      <div class="card stat"><div class="l">Money Health Score</div><div class="v" style="color:${A.health >= 70 ? 'var(--mint)' : A.health >= 50 ? 'var(--amber)' : 'var(--coral)'}">${A.health}/100</div>
+        <div class="lvl" style="width:${lv.pct}%;margin-top:8px"></div><div class="l">Lv ${lv.n} ${lv.name}</div></div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><h2>Where my money went · ${MONTHS[today.getMonth()]}</h2>
+        <p class="small muted">Sorted largest first. ${leak ? `Biggest money leak (a want): <b style="color:var(--coral)">${leak.label}</b> at ${inr(leak.v)}, ${Math.round(leak.v / A.mOut * 100)}% of spending${prevTop ? `, ${leak.v >= prevTop ? 'up' : 'down'} from ${inr(prevTop)} last month` : ''}.` : ''}</p>
+        ${hBars(A.cats, '#14c38e', 520, leak && leak.c)}</div>
+      <div class="card"><h2>Monthly cash inflow trajectory</h2>
+        <div class="legend"><span><i style="background:#14c38e"></i>Total inflow</span>${srcKeys.map(k => `<span><i style="background:${srcColors[k]}"></i>${IN_CATS[k]}</span>`).join('')}</div>
+        ${lineChart(A.series.map(m => mLabel(m.k)), [{values:A.series.map(m => m.in), color:'#14c38e', bold:true}, ...srcKeys.map(k => ({values:A.series.map(m => m.bySrc[k] || 0), color:srcColors[k]}))])}</div>
+      <div class="card"><h2>Inflow vs outflow by academic period (INR)</h2>
+        <div class="legend"><span><i style="background:#14c38e"></i>Money in</span><span><i style="background:#ff5c7a"></i>Money out</span></div>
+        ${semKeys.length ? groupBars(semKeys.map(k => A.sems[k].label), semKeys.map(k => A.sems[k].in), semKeys.map(k => A.sems[k].out)) : '<p class="muted">No data yet.</p>'}
+        <table class="small"><tr><th>Semester</th><th>In</th><th>Out</th><th>Net saved</th></tr>
+        ${semKeys.map(k => { const s = A.sems[k], net = s.in - s.out; return `<tr><td>${s.label}</td><td>${inr(s.in)}</td><td>${inr(s.out)}</td><td style="color:${net >= 0 ? 'var(--mint)' : 'var(--coral)'}">${inr(net)}</td></tr>`; }).join('')}</table></div>
+      <div class="card"><h2>Active saving goals and milestones</h2>
+        ${st.goals.map(g => { const p = clamp(g.saved / g.target * 100), rem = g.target - g.saved, mo = A.avgNet > 0 ? Math.ceil(rem / A.avgNet) : null; return `
+          <div style="margin-bottom:16px"><div class="row"><b>${esc(g.name)}</b><span class="grow"></span><span class="small">${inr(g.saved)} / ${inr(g.target)}</span></div>
+          <div class="prog" style="margin:6px 0"><div style="width:${p}%"></div></div>
+          <div class="row small">${[25,50,75,100].map(m => `<span class="tag ${p >= m ? 't-ok' : 't-vio'}">${p >= m ? '🏅' : '○'} ${m}%</span>`).join('')}
+            <span class="grow"></span><span class="muted">${p >= 100 ? 'Goal reached!' : mo ? `≈ ${mo} months at current saving rate` : 'Not saving yet this month'}</span>
+            ${p < 100 ? `<button class="btn sec sm" data-addgoal="${g.id}">+ Add ₹500</button>` : ''}</div></div>`; }).join('') || '<p class="muted">No goals yet.</p>'}
+        <div class="row"><input id="gName" placeholder="Goal name" style="flex:1"><input id="gTarget" type="number" placeholder="Target ₹" style="width:120px"><button class="btn sm" id="gAdd">Add goal</button></div></div>
+    </div>
+    <div class="card" style="margin-top:16px"><h2>Transaction details</h2>${txnTable(st, 12)}
+      <p class="small"><a href="#" id="toTracker">See all transactions in Snap Tracker →</a></p></div>`;
+  bindInbox();
+  document.querySelectorAll('[data-addgoal]').forEach(b => b.onclick = () => {
+    const g = st.goals.find(x => x.id === b.dataset.addgoal), before = g.saved / g.target;
+    g.saved = Math.min(g.target, g.saved + 500); st.txns.unshift({id:uid(), date:iso(today), type:'out', amt:500, cat:'other', need:'need', desc:`Saved to goal: ${g.name}`, mode:'UPI'});
+    const crossed = [25,50,75,100].find(m => before * 100 < m && g.saved / g.target * 100 >= m);
+    if (crossed) addXP(crossed === 100 ? 150 : 40, `${crossed}% milestone on ${g.name}`); else save(); render();
+  });
+  $('#gAdd').onclick = () => { const n = $('#gName').value.trim(), t = +$('#gTarget').value; if (!n || !t) return toast('Enter goal name and target');
+    st.goals.push({id:uid(), name:n, target:t, saved:0}); addXP(20, 'goal created'); render(); };
+  $('#toTracker').onclick = e => { e.preventDefault(); S.tab = 'tracker'; render(); };
+  bindTxnTable();
+}
+function txnTable(st, limit, filter={}){
+  let t = st.txns;
+  if (filter.type) t = t.filter(x => x.type === filter.type);
+  if (filter.cat) t = t.filter(x => x.cat === filter.cat);
+  if (filter.month) t = t.filter(x => monthKey(x.date) === filter.month);
+  if (filter.q) t = t.filter(x => x.desc.toLowerCase().includes(filter.q.toLowerCase()));
+  const shown = limit ? t.slice(0, limit) : t;
+  return `<div style="overflow-x:auto"><table><tr><th>Date</th><th>Description</th><th>Category</th><th>Need/Want</th><th>Mode</th><th style="text-align:right">Amount</th><th></th></tr>
+    ${shown.map(x => `<tr><td>${x.date}</td><td>${esc(x.desc)}</td><td>${x.type === 'in' ? IN_CATS[x.cat] : OUT_CATS[x.cat]?.label}</td>
+      <td>${x.type === 'in' ? '<span class="tag t-vio">income</span>' : `<span class="tag t-${x.need}">${x.need}</span>`}</td><td>${esc(x.mode)}</td>
+      <td style="text-align:right;font-weight:700;color:${x.type === 'in' ? 'var(--mint)' : 'var(--text)'}">${x.type === 'in' ? '+' : '−'}${inr(x.amt)}</td>
+      <td><button class="btn sec sm" data-del="${x.id}" title="Delete">✕</button></td></tr>`).join('')}</table></div>
+    <p class="small muted">${shown.length} of ${t.length} transactions</p>`;
+}
+function bindTxnTable(){
+  document.querySelectorAll('[data-del]').forEach(b => b.onclick = () => { const st = cur(); st.txns = st.txns.filter(x => x.id !== b.dataset.del); save(); render(); });
+}
+
+// 2. Snap Tracker
+function parseEntry(text){
+  const raw = text.trim(), low = ' ' + raw.toLowerCase() + ' ';
+  const nums = raw.replace(/,/g, '').match(/\d+(\.\d+)?/g);
+  if (!nums) return null;
+  const amt = +nums[nums.length - 1];
+  const isIn = /^\s*\+/.test(raw) || /\b(received|got|credited|allowance|stipend|scholarship|salary|income|in)\b/.test(low.replace(/ in (the|my) /g,' '));
+  let cat, need = '';
+  if (isIn){ cat = 'other'; for (const [c, ks] of IN_KEYWORDS) if (ks.some(k => low.includes(k))) { cat = c; break; } }
+  else {
+    cat = 'other'; for (const [c, ks] of KEYWORDS) if (ks.some(k => low.includes(k))) { cat = c; break; }
+    need = OUT_CATS[cat].need;
+    if (cat === 'recharge' && /netflix|spotify|prime|hotstar|ott/.test(low)) need = 'want';
+    if (/\bwant\b/.test(low)) need = 'want'; if (/\bneed\b/.test(low)) need = 'need';
+  }
+  const mode = /cash/.test(low) ? 'Cash' : /card/.test(low) ? 'Card' : /bank/.test(low) ? 'Bank' : 'UPI';
+  let desc = raw.replace(/[+₹]|\d+(\.\d+)?/g, '').replace(/\b(rs|inr|upi|cash|card|in|need|want)\b/gi, '').replace(/\s+/g, ' ').trim();
+  desc = desc ? desc[0].toUpperCase() + desc.slice(1) : (isIn ? IN_CATS[cat] : OUT_CATS[cat].label);
+  return {type:isIn ? 'in' : 'out', amt, cat, need, desc, mode};
+}
+let trackerFilter = {};
+function vTracker(){
+  const st = cur(), months = [...new Set(st.txns.map(t => monthKey(t.date)))];
+  $('#main').innerHTML = `
+    <h1>② Snap Tracker</h1><p class="sub">Type one line, like you'd text a friend. The app works out the amount, category and need/want for you.</p>
+    <div class="card" style="margin-bottom:16px">
+      <div class="row"><input id="snap" placeholder='e.g. "chai and puffs 40", "zomato biryani 220", "+8000 allowance", "bus 25 cash"' style="flex:1;min-width:260px;font-size:16px">
+      <button class="btn" id="snapGo">Add</button></div>
+      <div class="chips">${['chai and puffs 40','swiggy pizza 349','bus 25 cash','netflix 199','+3000 stipend','xerox 60 need','sneakers 2499'].map(x => `<button class="chip" data-ex="${x}">${x}</button>`).join('')}</div>
+      <div id="snapPrev"></div>
+      <details style="margin-top:10px"><summary class="small muted" style="cursor:pointer">Or add with a form</summary>
+        <div class="row" style="margin-top:10px">
+          <select id="fType"><option value="out">Money out</option><option value="in">Money in</option></select>
+          <input id="fAmt" type="number" placeholder="Amount ₹" style="width:120px">
+          <select id="fCat">${Object.entries(OUT_CATS).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('')}</select>
+          <select id="fNeed"><option value="need">Need</option><option value="want">Want</option></select>
+          <select id="fMode"><option>UPI</option><option>Cash</option><option>Card</option><option>Bank</option></select>
+          <input id="fDate" type="date" value="${iso(today)}">
+          <input id="fDesc" placeholder="Description" style="flex:1">
+          <button class="btn sec" id="fAdd">Add</button></div></details>
+    </div>
+    <div class="card"><div class="row" style="margin-bottom:10px"><h2 style="margin:0">All transactions</h2><span class="grow"></span>
+      <input id="tq" placeholder="Search" value="${esc(trackerFilter.q || '')}" style="width:150px">
+      <select id="tt"><option value="">In + out</option><option value="out" ${trackerFilter.type === 'out' ? 'selected' : ''}>Money out</option><option value="in" ${trackerFilter.type === 'in' ? 'selected' : ''}>Money in</option></select>
+      <select id="tm"><option value="">All months</option>${months.map(m => `<option value="${m}" ${trackerFilter.month === m ? 'selected' : ''}>${mLabel(m)}</option>`).join('')}</select>
+      <select id="tc"><option value="">All categories</option>${Object.entries(OUT_CATS).map(([k, v]) => `<option value="${k}" ${trackerFilter.cat === k ? 'selected' : ''}>${v.label}</option>`).join('')}</select>
+      <button class="btn sec sm" id="csv">Export CSV</button></div>
+      ${txnTable(st, 0, trackerFilter)}</div>`;
+  const prev = () => { const p = parseEntry($('#snap').value); $('#snapPrev').innerHTML = p ? `<div class="feedback small">🤖 AI read this as: <b>${p.type === 'in' ? 'Money in' : 'Money out'}</b> · ${inr(p.amt)} · ${p.type === 'in' ? IN_CATS[p.cat] : OUT_CATS[p.cat].label}${p.need ? ` · <span class="tag t-${p.need}">${p.need}</span>` : ''} · ${p.mode} · "${esc(p.desc)}"</div>` : ''; };
+  $('#snap').oninput = prev;
+  const go = () => { const p = parseEntry($('#snap').value); if (!p) return toast('Add an amount, e.g. "bus 25"');
+    st.txns.unshift(Object.assign({id:uid(), date:iso(today)}, p)); $('#snap').value = ''; addXP(5, 'expense logged'); render(); };
+  $('#snapGo').onclick = go; $('#snap').onkeydown = e => { if (e.key === 'Enter') go(); };
+  document.querySelectorAll('[data-ex]').forEach(b => b.onclick = () => { $('#snap').value = b.dataset.ex; prev(); $('#snap').focus(); });
+  $('#fType').onchange = () => { const isIn = $('#fType').value === 'in';
+    $('#fCat').innerHTML = isIn ? Object.entries(IN_CATS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('') : Object.entries(OUT_CATS).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join('');
+    $('#fNeed').disabled = isIn; };
+  $('#fAdd').onclick = () => { const amt = +$('#fAmt').value; if (!amt) return toast('Enter an amount'); const type = $('#fType').value;
+    st.txns.unshift({id:uid(), date:$('#fDate').value || iso(today), type, amt, cat:$('#fCat').value, need:type === 'in' ? '' : $('#fNeed').value, desc:$('#fDesc').value || 'Entry', mode:$('#fMode').value});
+    st.txns.sort((a, b) => b.date.localeCompare(a.date)); addXP(5, 'entry added'); render(); };
+  const f = () => { trackerFilter = {q:$('#tq').value, type:$('#tt').value, month:$('#tm').value, cat:$('#tc').value}; render(); setTimeout(() => { const q = $('#tq'); if (q){ q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }); };
+  $('#tq').oninput = f; $('#tt').onchange = f; $('#tm').onchange = f; $('#tc').onchange = f;
+  $('#csv').onclick = () => {
+    const rows = [['date','type','amount','category','need_want','mode','description'], ...st.txns.map(t => [t.date, t.type, t.amt, t.cat, t.need, t.mode, '"' + t.desc.replace(/"/g, '""') + '"'])];
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([rows.map(r => r.join(',')).join('\n')], {type:'text/csv'}));
+    a.download = `${st.name.replace(/\s+/g, '_')}_transactions.csv`; try { a.click(); } catch(e){}
+    try { navigator.clipboard.writeText(rows.map(r => r.join(',')).join('\n')).then(() => toast('CSV downloaded / copied to clipboard'), () => {}); } catch(e){} };
+  bindTxnTable();
+}
+
+// 3. Risk Radar
+function vRadar(){
+  const st = cur(), A = analyze(st);
+  const weakest = Object.entries(A.scores).sort((a, b) => a[1] - b[1])[0];
+  const actions = {
+    'Impulse control':'Before any "want" over ₹300, wait 24 hours. Play Swipe or Skip to train this.',
+    'Savings rate':'Auto-save ₹50 a day. Open the What-If Simulator to see it add up to ₹9,100 a semester.',
+    'Budget discipline':'Lower the category you overspent most and check alerts twice a week.',
+    'Debt & BNPL':'Do not start any new Pay Later purchase until current EMIs are cleared.',
+    'Scam awareness':'Play Scam Spotter. Remember: the UPI PIN is only for sending money.',
+    'Emergency buffer':'Build a buffer of one month\'s spending before saving for wants.'};
+  const expl = {
+    'Impulse control':`${Math.round(A.impulse*100)}% of this month's spending is on wants`,
+    'Savings rate':`${Math.max(0, Math.round(A.savingsRate*100))}% of this month's inflow is still unspent`,
+    'Budget discipline':`${A.over.length} of ${Object.values(st.budgets).filter(b => b).length} budget categories crossed`,
+    'Debt & BNPL':`${inr(A.bnpl)} paid to EMI / BNPL this month`,
+    'Scam awareness':st.games.scam == null ? 'Scam Spotter not played yet' : `Scam Spotter score ${st.games.scam}%`,
+    'Emergency buffer':`Balance covers ${A.bufferMonths.toFixed(1)} months of average spending`};
+  $('#main').innerHTML = `<h1>③ Risk Radar</h1><p class="sub">Six signals from your own transactions and game results. Higher is safer on every axis.</p>
+    <div class="grid g2">
+      <div class="card" style="text-align:center"><div class="muted small">Money Health Score</div>
+        <div class="big" style="color:${A.health >= 70 ? 'var(--mint)' : A.health >= 50 ? 'var(--amber)' : 'var(--coral)'}">${A.health}/100</div>
+        <div class="small muted">${A.health >= 70 ? 'Healthy' : A.health >= 50 ? 'Needs attention' : 'At risk'}</div>${radar(A.scores)}</div>
+      <div class="card"><h2>This week's one action</h2>
+        <div class="alert warn"><div class="ic">🎯</div><div><b>Work on ${weakest[0]} (${Math.round(weakest[1])}/100)</b><div class="small">${actions[weakest[0]]}</div></div></div>
+        <h2 style="margin-top:18px">How each score is worked out</h2>
+        <table>${Object.entries(A.scores).map(([k, v]) => `<tr><td><b>${k}</b><div class="small muted">${expl[k]}</div></td>
+          <td style="width:120px"><div class="prog"><div style="width:${v}%;background:${v >= 70 ? 'var(--mint)' : v >= 50 ? 'var(--amber)' : 'var(--coral)'}"></div></div></td><td style="width:40px">${Math.round(v)}</td></tr>`).join('')}</table></div>
+    </div>`;
+}
+
+// 4. Smart Alerts
+function vAlerts(){
+  const st = cur(), A = analyze(st), al = alertsFor(st, A);
+  $('#main').innerHTML = `${mentorInbox(st)}<h1>④ Smart Alerts</h1><p class="sub">Budget limits at 50%, 80% and 100%, spending patterns, scam warnings and messages from your mentor.</p>
+    <div class="grid g2"><div class="card"><h2>Alerts now</h2>${al.map(a => `<div class="alert ${a.lvl}"><div class="ic">${a.ic}</div><div><b>${esc(a.t)}</b><div class="small">${esc(a.d)}</div></div></div>`).join('')}</div>
+    <div class="card"><h2>My monthly budgets</h2><p class="small muted">Change a limit and the alerts update.</p>
+      ${Object.entries(st.budgets).map(([c, b]) => { const sp = A.byCat[c] || 0, p = b ? sp / b * 100 : 0; return `
+        <div style="margin-bottom:12px"><div class="row small"><b>${OUT_CATS[c].label}</b><span class="grow"></span>${inr(sp)} of ₹<input type="number" data-bud="${c}" value="${b}" style="width:90px;padding:4px 8px"></div>
+        <div class="prog" style="margin-top:5px"><div style="width:${clamp(p)}%;background:${p >= 100 ? 'var(--coral)' : p >= 80 ? 'var(--amber)' : 'var(--mint)'}"></div></div></div>`; }).join('')}
+      <h3 style="margin-top:14px">Past mentor messages</h3>${st.inbox.filter(m => m.status === 'done').map(m => `<div class="small muted">✔ ${m.date} · ${esc(m.text)}</div>`).join('') || '<div class="small muted">None yet.</div>'}
+    </div></div>`;
+  bindInbox();
+  document.querySelectorAll('[data-bud]').forEach(i => i.onchange = () => { st.budgets[i.dataset.bud] = +i.value || 0; save(); render(); });
+}
+
+// 1. Mind Games Arcade
+const SWIPE_ITEMS = [
+  {n:'Wireless earbuds', p:1499, t:'⚡ 70% OFF · ends in 09:59', need:false},
+  {n:'Semester lab record book', p:120, t:'Needed for Monday\'s lab', need:true},
+  {n:'Limited sneakers drop', p:3999, t:'🔥 Only 3 left!', need:false},
+  {n:'Game battle pass', p:449, t:'Your squad already bought it', need:false},
+  {n:'Bus pass renewal', p:350, t:'Expires tomorrow', need:true},
+  {n:'Fancy phone cover', p:599, t:'Flash sale · 2 hrs left', need:false},
+  {n:'Mobile data recharge', p:299, t:'Data runs out today', need:true},
+  {n:'Smartwatch "MRP ₹9,999"', p:2499, t:'75% OFF · today only', need:false},
+];
+const NOWLATER = [[500,600,3],[1000,1050,6],[2000,2600,12],[300,330,1],[5000,5250,12]];
+const SCAMS = [
+  {m:'"Congrats! You received ₹5,000. Enter your UPI PIN to accept."', scam:true, why:'You never need a PIN to RECEIVE money. The PIN is only for sending.'},
+  {m:'"Part-time job: like YouTube videos, earn ₹3,000 a day. Pay ₹499 registration."', scam:true, why:'Real jobs never ask you to pay to join. "Task" scams take a fee and disappear.'},
+  {m:'College office: "Exam fee portal open on the official KTU site till Friday."', scam:false, why:'Official notice, official site, no request for PINs or OTPs.'},
+  {m:'"Your bank KYC expires today. Click bit.ly/kyc-upd8 to avoid account block."', scam:true, why:'Banks do not send short links for KYC. Urgency + link = phishing.'},
+  {m:'"Instant loan ₹20,000 in 5 mins, no documents! Install this app."', scam:true, why:'Unregistered loan apps charge huge fees and harass borrowers. Check RBI-registered lenders only.'},
+  {m:'Friend on WhatsApp: "Can you split the IV trip bus? Here is the class rep\'s UPI ID."', scam:false, why:'Normal request from a known person. Still confirm with the class rep before paying.'},
+];
+let game = null;
+function vArcade(){
+  const st = cur();
+  if (game) return renderGame();
+  const best = st.games;
+  $('#main').innerHTML = `<h1>① Mind Games Arcade</h1><p class="sub">Each game takes under 2 minutes and teaches one money bias.</p>
+    <div class="grid g3">
+      ${[['swipe','🛒 Swipe or Skip','Impulse buying and FOMO. Flash-sale timers try to rush you.', best.swipe != null ? `Best: saved ${inr(best.swipe)}` : 'Not played'],
+         ['nowlater','⏳ Now or Later','Present bias and the time value of money.', best.nowlater != null ? `Best: ${best.nowlater}/5 smart picks` : 'Not played'],
+         ['scam','🛡️ Scam Spotter','UPI fraud, fake jobs and loan apps. Spot the red flags.', best.scam != null ? `Best: ${best.scam}%` : 'Not played']]
+       .map(([id, n, d, b]) => `<div class="card"><h2>${n}</h2><p class="small muted">${d}</p><p class="small">${b}</p><button class="btn" data-game="${id}">Play</button></div>`).join('')}
+      <div class="card" style="opacity:.7"><h2>🔒 More games</h2><p class="small muted">Anchor Trap · Herd Hunter · Loss or Gain · Budget Survival unlock at Level 3.</p></div>
+    </div>`;
+  document.querySelectorAll('[data-game]').forEach(b => b.onclick = () => { game = {id:b.dataset.game, i:0, score:0, saved:0, fb:null}; render(); });
+}
+function renderGame(){
+  const st = cur(), g = game;
+  const done = (n) => g.i >= n;
+  let html = `<div class="row" style="margin-bottom:14px"><button class="btn sec sm" id="quit">← Arcade</button><span class="grow"></span></div>`;
+  if (g.id === 'swipe'){
+    if (done(SWIPE_ITEMS.length)){
+      const spentWant = SWIPE_ITEMS.filter((x, i) => !x.need && g.picks[i]).reduce((a, x) => a + x.p, 0);
+      html += `<div class="gamecard"><h1>Round over</h1><div class="big" style="color:var(--mint)">${inr(g.saved)}</div><p>saved by "future you" by skipping wants</p>
+        <p class="muted">You bought ${inr(spentWant)} of wants. Flash-sale timers and "only 3 left" are designed to make you buy before you think. Rule: wait 24 hours before any want over ₹300.</p>
+        <button class="btn" id="again">Play again</button></div>`;
+    } else { const it = SWIPE_ITEMS[g.i];
+      html += `<div class="gamecard"><div class="muted small">Item ${g.i + 1} of ${SWIPE_ITEMS.length}</div><h1 style="margin:14px 0 4px">${it.n}</h1><div class="big">${inr(it.p)}</div>
+        <p style="color:var(--amber)">${it.t}</p><div class="row" style="justify-content:center"><button class="btn bad" data-pick="0">👈 Skip</button><button class="btn" data-pick="1">Buy 👉</button></div>
+        ${g.fb ? `<div class="feedback small">${g.fb}</div>` : ''}</div>`; }
+  }
+  if (g.id === 'nowlater'){
+    if (done(NOWLATER.length)) html += `<div class="gamecard"><h1>${g.score}/5 smart picks</h1><p class="muted">Waiting pays when the extra amount beats what your money could earn safely (about 7% a year in a bank FD). Present bias makes "now" feel bigger than it is.</p><button class="btn" id="again">Play again</button></div>`;
+    else { const [a, b, m] = NOWLATER[g.i];
+      html += `<div class="gamecard"><div class="muted small">Round ${g.i + 1} of 5</div><h1 style="margin:14px 0">Which do you pick?</h1>
+        <div class="row" style="justify-content:center"><button class="btn sec" data-nl="now" style="font-size:20px;padding:20px">${inr(a)} today</button>
+        <button class="btn vio" data-nl="later" style="font-size:20px;padding:20px">${inr(b)} in ${m} month${m > 1 ? 's' : ''}</button></div>
+        ${g.fb ? `<div class="feedback small">${g.fb}</div>` : ''}</div>`; }
+  }
+  if (g.id === 'scam'){
+    if (done(SCAMS.length)){ const pct = Math.round(g.score / SCAMS.length * 100);
+      html += `<div class="gamecard"><h1>${pct}% scam awareness</h1><p class="muted">This score feeds your Risk Radar. Golden rules: never share PIN or OTP, never pay to get a job or a loan, check links before clicking.</p><button class="btn" id="again">Play again</button></div>`; }
+    else { const s = SCAMS[g.i];
+      html += `<div class="gamecard"><div class="muted small">Message ${g.i + 1} of ${SCAMS.length}</div><h2 style="margin:16px 0;font-size:20px">${esc(s.m)}</h2>
+        <div class="row" style="justify-content:center"><button class="btn bad" data-sc="1">🚩 Scam</button><button class="btn" data-sc="0">✅ Safe</button></div>
+        ${g.fb ? `<div class="feedback small">${g.fb}</div>` : ''}</div>`; }
+  }
+  $('#main').innerHTML = html;
+  $('#quit').onclick = () => { game = null; render(); };
+  const again = $('#again'); if (again) again.onclick = () => { game = {id:g.id, i:0, score:0, saved:0, fb:null}; render(); };
+  document.querySelectorAll('[data-pick]').forEach(b => b.onclick = () => { const it = SWIPE_ITEMS[g.i], buy = b.dataset.pick === '1'; g.picks = g.picks || []; g.picks[g.i] = buy;
+    if (!buy && !it.need) g.saved += it.p;
+    g.fb = it.need ? (buy ? '✅ Good call, that is a need.' : '⚠️ That one was a need. Skipping needs causes bigger problems later.') : (buy ? `😬 That was a want. "${it.t}" is a pressure tactic.` : `💪 Nice. ${inr(it.p)} stays with you.`);
+    g.i++; if (g.i >= SWIPE_ITEMS.length){ st.games.swipe = Math.max(st.games.swipe || 0, g.saved); addXP(30, 'Swipe or Skip'); } render(); });
+  document.querySelectorAll('[data-nl]').forEach(b => b.onclick = () => { const [a, bb, m] = NOWLATER[g.i], ann = (Math.pow(bb / a, 12 / m) - 1) * 100, laterBetter = ann > 7, pickLater = b.dataset.nl === 'later';
+    if (pickLater === laterBetter) g.score++;
+    g.fb = `Waiting earns ${inr(bb - a)}, an annual return of about ${Math.round(ann)}%. ${laterBetter ? 'That beats a 7% FD, so waiting is smarter.' : 'That is less than a 7% FD, so taking it now and saving it is fine.'}`;
+    g.i++; if (g.i >= NOWLATER.length){ st.games.nowlater = Math.max(st.games.nowlater || 0, g.score); addXP(30, 'Now or Later'); } render(); });
+  document.querySelectorAll('[data-sc]').forEach(b => b.onclick = () => { const s = SCAMS[g.i], said = b.dataset.sc === '1'; if (said === s.scam) g.score++;
+    g.fb = `${said === s.scam ? '✅ Correct.' : '❌ Not quite.'} ${s.why}`;
+    g.i++; if (g.i >= SCAMS.length){ st.games.scam = Math.round(g.score / SCAMS.length * 100); addXP(40, 'Scam Spotter'); } render(); });
+}
+
+// 5. Learn Bytes
+const CASES = [
+  {t:'Rahul\'s hostel month', s:'Rahul gets ₹8,000 a month. By day 20 only ₹400 is left after food delivery and weekend trips. What should he do first next month?',
+   o:['Ask parents for more money','Split ₹8,000 as needs ₹4,000, wants ₹2,400, savings ₹1,600 on day 1','Stop eating at the mess to save'], a:1,
+   e:'The 50-30-20 rule: 50% needs (₹4,000), 30% wants (₹2,400), 20% savings (₹1,600), decided on day 1 before spending starts.'},
+  {t:'The "no-cost" phone EMI', s:'A ₹24,000 phone is offered at ₹2,000 a month for 12 months, "no-cost EMI", plus a ₹500 processing fee. True cost?',
+   o:['₹24,000','₹24,500','₹26,000'], a:1, e:'"No-cost" removes interest, but the ₹500 fee is still paid: ₹24,500. And ₹2,000 is 25% of an ₹8,000 allowance for a whole year.'},
+  {t:'Daily chai and snacks', s:'You spend ₹60 a day at the canteen and juice shop. Roughly how much is that in a year?',
+   o:['About ₹6,000','About ₹12,000','About ₹21,900'], a:2, e:'₹60 × 365 = ₹21,900. Small daily spends add up; the What-If Simulator shows this for any habit.'},
+];
+const NEEDWANT = [
+  ['Hostel rent','need','A roof is non-negotiable.'],['Spotify Premium','want','The free plan works; premium is comfort.'],['Bus pass','need','You need to reach college.'],
+  ['New sneakers (you have 2 pairs)','want','Nice to have, not required.'],['Lab coat for chemistry lab','need','Required by the lab.'],
+  ['Friend\'s birthday treat','depends','Fine if it fits your fun budget; skip it if you are over.'],['Mobile recharge','need','Needed for classes, OTPs and family.'],
+  ['IV trip','depends','Often academic and valuable; plan and save for it.'],['Laptop repair','depends','A need for CSE coursework; an upgrade for gaming is a want.'],['Game top-up','want','Pure want; set a monthly cap.'],
+];
+const QUIZ = [
+  {q:'What is the UPI PIN used for?', o:['Receiving money','Sending money','Both'], a:1, e:'Only for sending. Anyone asking for your PIN so you can "receive" money is a scammer.'},
+  {q:'What does ₹100 a day become in a year?', o:['₹3,650','₹36,500','₹12,000'], a:1, e:'₹100 × 365 = ₹36,500.'},
+  {q:'BNPL (Buy Now Pay Later) is…', o:['Free money','A loan','A discount'], a:1, e:'It is a loan. Missed payments bring late fees and hurt your credit score.'},
+  {q:'In the 50-30-20 rule, what is the 20%?', o:['Wants','Needs','Savings'], a:2, e:'20% goes to savings, decided at the start of the month.'},
+  {q:'A "flash sale ends in 10 minutes" timer is mainly designed to…', o:['Help you save','Rush you into buying','Show stock levels'], a:1, e:'Urgency cuts thinking time. A 24-hour wait rule beats it.'},
+];
+let learn = {mode:null, i:0, score:0, fb:null};
+function vLearn(){
+  const st = cur();
+  if (!learn.mode){
+    $('#main').innerHTML = `<h1>⑤ Learn Bytes</h1><p class="sub">2–3 minute lessons with INR examples and instant explanations.</p>
+      <div class="grid g3">
+        <div class="card"><h2>💰 INR case studies</h2><p class="small muted">Real campus money situations. Make the call, see why.</p><button class="btn" data-lm="case">Start (${CASES.length})</button></div>
+        <div class="card"><h2>⚖️ Needs vs Wants test</h2><p class="small muted">Sort ${NEEDWANT.length} items. Instant reason for each.</p><p class="small">${st.games.needwant != null ? 'Last score: ' + st.games.needwant + '%' : ''}</p><button class="btn" data-lm="nw">Start</button></div>
+        <div class="card"><h2>❓ Mini quiz</h2><p class="small muted">${QUIZ.length} quick questions, explanation after each.</p><p class="small">${st.games.quiz != null ? 'Last score: ' + st.games.quiz + '%' : ''}</p><button class="btn" data-lm="quiz">Start</button></div>
+      </div>
+      <div class="card" style="margin-top:16px"><h2>Learning path</h2><div class="row">${['UPI and digital safety','Budgeting (50-30-20)','Needs vs wants','Bank accounts and interest','EMI, BNPL and credit scores','Saving and SIPs','Insurance basics','Tax on stipends'].map((u, i) => `<span class="tag ${i < 3 ? 't-ok' : 't-vio'}" style="padding:6px 12px">${i < 3 ? '✔' : '🔒'} ${u}</span>`).join('')}</div></div>`;
+    document.querySelectorAll('[data-lm]').forEach(b => b.onclick = () => { learn = {mode:b.dataset.lm, i:0, score:0, fb:null}; render(); });
+    return;
+  }
+  const L = learn, list = L.mode === 'case' ? CASES : L.mode === 'nw' ? NEEDWANT : QUIZ;
+  let html = `<div class="row" style="margin-bottom:14px"><button class="btn sec sm" id="lback">← Learn Bytes</button></div>`;
+  if (L.i >= list.length){
+    const pct = Math.round(L.score / list.length * 100);
+    html += `<div class="gamecard"><h1>Done! ${L.score}/${list.length}</h1><p class="muted">${pct >= 80 ? 'Excellent money sense.' : 'Missed questions will come back in 2 days for review.'}</p><button class="btn" id="lback2">Back</button></div>`;
+  } else if (L.mode === 'nw'){
+    const [item] = NEEDWANT[L.i];
+    html += `<div class="gamecard"><div class="muted small">${L.i + 1} of ${NEEDWANT.length}</div><h1 style="margin:16px 0">${esc(item)}</h1>
+      <div class="row" style="justify-content:center"><button class="btn" data-nw="need">Need</button><button class="btn warn" data-nw="want">Want</button><button class="btn vio" data-nw="depends">Depends</button></div>
+      ${L.fb ? `<div class="feedback small">${L.fb}</div>` : ''}</div>`;
+  } else {
+    const q = list[L.i];
+    html += `<div class="gamecard" style="text-align:left"><div class="muted small">${L.i + 1} of ${list.length}</div>
+      ${L.mode === 'case' ? `<h2 style="margin-top:10px">${esc(q.t)}</h2><p>${esc(q.s)}</p>` : `<h2 style="margin-top:10px">${esc(q.q)}</h2>`}
+      <div class="grid" style="gap:8px;margin-top:12px">${q.o.map((o, i) => `<button class="btn sec" data-ans="${i}" style="text-align:left">${esc(o)}</button>`).join('')}</div>
+      ${L.fb ? `<div class="feedback small">${L.fb}</div>` : ''}</div>`;
+  }
+  $('#main').innerHTML = html;
+  const back = () => { learn = {mode:null}; render(); };
+  $('#lback').onclick = back; if ($('#lback2')) $('#lback2').onclick = back;
+  const finish = () => { if (L.i >= list.length){ const pct = Math.round(L.score / list.length * 100);
+    if (L.mode === 'nw') st.games.needwant = pct; if (L.mode === 'quiz') st.games.quiz = pct; addXP(30, 'Learn Byte complete'); } };
+  document.querySelectorAll('[data-nw]').forEach(b => b.onclick = () => { const [, ans, why] = NEEDWANT[L.i], ok = b.dataset.nw === ans; if (ok) L.score++;
+    L.fb = `${ok ? '✅ Right' : '❌ It is a ' + ans.toUpperCase()}: ${why}`; L.i++; finish(); render(); });
+  document.querySelectorAll('[data-ans]').forEach(b => b.onclick = () => { const q = list[L.i], ok = +b.dataset.ans === q.a; if (ok) L.score++;
+    L.fb = `${ok ? '✅ Correct!' : '❌ Answer: ' + q.o[q.a] + '.'} ${q.e}`; L.i++; finish(); render(); });
+}
+
+// 7. What-If Simulator
+let wi = {amt:50, freq:'day', rate:7, label:'Save ₹50 every day'};
+function vWhatIf(){
+  const st = cur(), A = analyze(st);
+  const per = {day:[182, 365], week:[26, 52], month:[6, 12]}[wi.freq];
+  const sem = wi.amt * per[0], yr = wi.amt * per[1];
+  const monthly = wi.freq === 'day' ? wi.amt * 365 / 12 : wi.freq === 'week' ? wi.amt * 52 / 12 : wi.amt;
+  const r = wi.rate / 100 / 12, fv = n => r ? monthly * (Math.pow(1 + r, n) - 1) / r : monthly * n;
+  const semNow = semesterOf(st, iso(today))?.n || (st.year * 2 - 1), remMonths = Math.max(6, (8 - semNow + 1) * 6);
+  const base = Math.max(0, A.avgNet);
+  $('#main').innerHTML = `<h1>⑦ What-If Simulator</h1><p class="sub">Test a money choice before you make it.</p>
+    <div class="grid g2">
+      <div class="card"><h2>Your scenario</h2>
+        <div class="chips">${[['Save ₹50 every day',50,'day'],['Cut food delivery by ₹1,500 a month',1500,'month'],['Skip one ₹199 OTT plan',199,'month'],['Bus instead of auto: ₹150 a week',150,'week'],['Save ₹100 every day',100,'day']]
+          .map(([l, a, f]) => `<button class="chip" data-pre="${a}|${f}|${l}">${l}</button>`).join('')}</div>
+        <div class="row"><div class="field"><label>Amount (₹)</label><input id="wAmt" type="number" value="${wi.amt}" style="width:130px"></div>
+          <div class="field"><label>How often</label><select id="wFreq">${['day','week','month'].map(f => `<option value="${f}" ${wi.freq === f ? 'selected' : ''}>per ${f}</option>`).join('')}</select></div>
+          <div class="field"><label>Interest if invested (% a year)</label><input id="wRate" type="number" value="${wi.rate}" style="width:100px"></div></div>
+        <p class="small muted">Semester = 6 months (182 days); year = 12 months (365 days). Interest assumes the money is deposited monthly (RD or SIP); returns are not guaranteed.</p>
+        <button class="btn vio" id="wAsk">🤖 Ask the mentor about this</button></div>
+      <div class="card"><h2>${esc(wi.label || 'Result')}</h2>
+        <div class="grid g3">
+          <div class="stat"><div class="l">Per semester</div><div class="v" style="color:var(--mint)">${inr(sem)}</div></div>
+          <div class="stat"><div class="l">Per year</div><div class="v" style="color:var(--mint)">${inr(yr)}</div></div>
+          <div class="stat"><div class="l">Till graduation (${remMonths} months)</div><div class="v" style="color:var(--mint)">${inr(monthly * remMonths)}</div></div>
+          <div class="stat"><div class="l">After 1 year at ${wi.rate}%</div><div class="v" style="color:var(--amber)">${inr(fv(12))}</div></div>
+          <div class="stat"><div class="l">At graduation at ${wi.rate}%</div><div class="v" style="color:var(--amber)">${inr(fv(remMonths))}</div></div>
+          <div class="stat"><div class="l">That's about</div><div class="v" style="font-size:18px">${yr >= 45000 ? 'a new laptop' : yr >= 15000 ? 'a semester\'s hostel mess bills' : yr >= 6000 ? 'an IV trip' : 'a year of mobile recharges'}</div></div>
+        </div>
+        <h3 style="margin-top:16px">Impact on your goals</h3>
+        <table class="small"><tr><th>Goal</th><th>Now</th><th>With this change</th></tr>
+        ${st.goals.filter(g => g.saved < g.target).map(g => { const rem = g.target - g.saved, now = base > 0 ? Math.ceil(rem / base) : null, w = Math.ceil(rem / (base + monthly));
+          return `<tr><td>${esc(g.name)}</td><td>${now ? now + ' months' : 'not reachable at current rate'}</td><td style="color:var(--mint);font-weight:700">${w} months${now ? ` (${now - w} sooner)` : ''}</td></tr>`; }).join('') || '<tr><td colspan="3" class="muted">No open goals.</td></tr>'}</table>
+        <button class="btn sm" id="wGoal" style="margin-top:12px">Save as a new goal</button></div>
+    </div>`;
+  const upd = () => { wi.amt = +$('#wAmt').value || 0; wi.freq = $('#wFreq').value; wi.rate = +$('#wRate').value || 0; wi.label = `What if I ${wi.amt ? 'save ₹' + wi.amt.toLocaleString('en-IN') + ' per ' + wi.freq : ''}?`; render(); };
+  ['#wAmt','#wFreq','#wRate'].forEach(id => $(id).onchange = upd);
+  document.querySelectorAll('[data-pre]').forEach(b => b.onclick = () => { const [a, f, l] = b.dataset.pre.split('|'); wi.amt = +a; wi.freq = f; wi.label = l; render(); });
+  $('#wGoal').onclick = () => { st.goals.push({id:uid(), name:wi.label.replace(/^What if I /, '').replace('?', '') || 'What-If savings', target:Math.round(yr), saved:0}); addXP(20, 'scenario saved as goal'); S.tab = 'dashboard'; render(); };
+  $('#wAsk').onclick = () => { S.tab = 'mentor'; render(); askMentor(`I want to try this: ${wi.label} (₹${wi.amt} per ${wi.freq}). That's ${inr(sem)} a semester and ${inr(yr)} a year. How do I make it stick?`); };
+}
+
+// 8. AI Financial Mentor (Groq + built-in fallback)
+function summaryFor(st){
+  const A = analyze(st);
+  return {name:st.name, branch:st.branch, year:st.year, residence:st.residence, monthlyAllowance:st.allowance, balance:Math.round(A.balance),
+    thisMonth:{moneyIn:A.mIn, moneyOut:A.mOut, wantsShare:Math.round(A.impulse*100) + '%', topCategories:A.cats.slice(0, 4).map(c => `${c.label}: ₹${c.v}`), foodDeliveryOrders:A.deliveryCount, bnpl:A.bnpl, overBudget:A.over.map(o => o.label)},
+    goals:st.goals.map(g => `${g.name}: ₹${g.saved} of ₹${g.target}`), riskRadar:Object.fromEntries(Object.entries(A.scores).map(([k, v]) => [k, Math.round(v)])), moneyHealth:A.health,
+    customProfile:Object.fromEntries(st.custom.map(c => [c.k, c.v])), avgMonthlyNetSaving:Math.round(A.avgNet)};
+}
+function localMentor(st, q){
+  const A = analyze(st), low = q.toLowerCase(), top = A.cats.find(c => OUT_CATS[c.c]?.need === 'want') || A.cats[0], num = +(q.replace(/,/g, '').match(/\d+/) || [0])[0];
+  if (/where|went|spend|spent|leak/.test(low) && top)
+    return `This month you spent ${inr(A.mOut)}. Top: ${A.cats.slice(0, 3).map(c => `${c.label} ${inr(c.v)}`).join(', ')}.\n${top.label} (a want) is ${Math.round(top.v / A.mOut * 100)}%. Cutting it by a third keeps about ${inr(top.v / 3)} with you.`;
+  if (/afford|buy|trip|can i/.test(low)){
+    const free = A.balance - A.avgOut * 0.5;
+    if (!num) return `Your balance is ${inr(A.balance)}. Tell me the price, e.g. "Can I afford a ₹2,500 trip?"`;
+    return num <= free ? `Yes, ${inr(num)} fits. You'd still keep ${inr(A.balance - num)}, about ${((A.balance - num) / A.avgOut).toFixed(1)} months of spending. Log it as a planned want.`
+      : `Not comfortably. ${inr(num)} would leave ${inr(A.balance - num)}, less than half a month of spending. Save ${inr(Math.ceil((num - free) / 4))} a week for 4 weeks first.`;
+  }
+  if (/stick|habit|how do i|try this|save/.test(low))
+    return `3 tricks that work:\n1. Move the money on the day your allowance arrives, before spending.\n2. Delete one delivery app for 2 weeks; mess food on weekdays.\n3. Turn it into a goal in the dashboard so every milestone gives you XP.`;
+  if (/budget|plan|50/.test(low))
+    return `With ${inr(st.allowance)} a month, try 50-30-20: needs ${inr(st.allowance*.5)}, wants ${inr(st.allowance*.3)}, savings ${inr(st.allowance*.2)}. Right now wants are ${Math.round(A.impulse*100)}% of your spending.`;
+  if (/goal/.test(low))
+    return st.goals.map(g => `${g.name}: ${Math.round(g.saved / g.target * 100)}% done`).join('\n') + (A.avgNet > 0 ? `\nYou save about ${inr(A.avgNet)} a month on average.` : '\nYou spent more than you received recently; start with ₹50 a day.');
+  if (/score|radar|health/.test(low)){ const w = Object.entries(A.scores).sort((a, b) => a[1] - b[1])[0];
+    return `Money Health Score: ${A.health}/100. Weakest area: ${w[0]} (${Math.round(w[1])}). Fix that one first; check the Risk Radar for this week's action.`; }
+  if (/scam|upi|otp|pin/.test(low)) return 'Never share your UPI PIN or OTP. You never need a PIN to receive money. If in doubt, call 1930 (national cyber-crime helpline).';
+  if (/stock|crypto|invest|sip|mutual/.test(low)) return 'I can explain how SIPs and mutual funds work, but I don\'t recommend specific stocks or crypto. Start with an emergency buffer, then a small SIP in a diversified index fund after reading the scheme documents.';
+  if (/stress|debt|loan|worried|tension/.test(low)) return 'Money stress is common and fixable. List what you owe and to whom, then talk to your faculty mentor or the college counselling cell. Avoid instant loan apps.';
+  return `Quick summary: balance ${inr(A.balance)}, ${inr(A.mOut)} spent this month, health ${A.health}/100.${top ? ` Biggest spend: ${top.label}.` : ''} Ask me "Where did my money go?", "Can I afford ₹2,000?" or "How do I save more?"`;
+}
+async function askMentor(q){
+  const st = cur(); st.chat.push({me:true, t:q}); st.chat.push({me:false, t:'…', pending:true}); save(); if (S.tab === 'mentor') vMentor();
+  let ans, src = 'built-in';
+  if (S.groq.key){
+    try {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer ' + S.groq.key},
+        body:JSON.stringify({model:S.groq.model, temperature:0.5, max_tokens:300, messages:[
+          {role:'system', content:'You are FinQuest, a friendly financial mentor for B.Tech students in Kerala, India. Reply in 2-4 short lines, simple English, amounts in INR (₹). Use the student data provided. Education only: never recommend specific stocks, crypto or loan apps. If the student mentions serious money stress or debt, suggest talking to their faculty mentor or the college counselling cell.'},
+          {role:'system', content:'Student data: ' + JSON.stringify(summaryFor(st))},
+          ...st.chat.filter(m => !m.pending).slice(-8).map(m => ({role:m.me ? 'user' : 'assistant', content:m.t}))]})});
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      ans = (await res.json()).choices[0].message.content.trim(); src = 'Groq · ' + S.groq.model;
+    } catch(e){ ans = localMentor(st, q) + `\n\n(Groq not reachable: ${e.message}. Answered with the built-in mentor.)`; }
+  } else ans = localMentor(st, q);
+  st.chat = st.chat.filter(m => !m.pending); st.chat.push({me:false, t:ans, src}); st.lastActive = iso(today); save(); if (S.role === 'student' && S.tab === 'mentor') vMentor();
+}
+function vMentor(){
+  const st = cur();
+  if (!st.chat.length) st.chat.push({me:false, t:`Hi ${st.name.split(' ')[0]}! I'm your FinQuest money mentor. I can see your spending summary and goals (never your bank details). What do you want to know?`, src:'built-in'});
+  $('#main').innerHTML = `<h1>⑧ AI Financial Mentor</h1><p class="sub">Powered by Groq when an API key is set in My Profile; otherwise a built-in rule-based mentor answers from your data.</p>
+    <div class="grid g2"><div class="card">
+      <div class="chat" id="chat">${st.chat.map(m => `<div class="msg ${m.me ? 'me' : 'bot'}">${esc(m.t)}${!m.me && m.src ? `<div class="small muted" style="margin-top:4px">${esc(m.src)}</div>` : ''}</div>`).join('')}</div>
+      <div class="chips">${['Where did my money go?','Can I afford a ₹2,500 trip?','Make me a budget','How are my goals?','What is my weakest area?','Is this UPI message a scam?'].map(c => `<button class="chip" data-q="${c}">${c}</button>`).join('')}</div>
+      <div class="row"><input id="mq" placeholder="Ask anything about your money…" style="flex:1"><button class="btn" id="mgo">Send</button><button class="btn sec" id="mclr">Clear</button></div></div>
+      <div class="card"><h2>What the mentor sees</h2><pre class="small" style="white-space:pre-wrap;color:var(--muted);margin:0">${esc(JSON.stringify(summaryFor(st), null, 2))}</pre>
+        <p class="small muted">Status: ${S.groq.key ? '🟢 Groq API key set (' + esc(S.groq.model) + ')' : '⚪ No Groq key: using the built-in mentor'}</p></div></div>`;
+  const c = $('#chat'); c.scrollTop = c.scrollHeight;
+  const send = () => { const q = $('#mq').value.trim(); if (q) askMentor(q); };
+  $('#mgo').onclick = send; $('#mq').onkeydown = e => { if (e.key === 'Enter') send(); };
+  document.querySelectorAll('[data-q]').forEach(b => b.onclick = () => askMentor(b.dataset.q));
+  $('#mclr').onclick = () => { st.chat = []; save(); vMentor(); };
+}
+
+// Profile (student name + extra parameters)
+function profileForm(st, isNew){
+  return `<div class="grid g3">
+    ${[['name','Student name','text'],['regNo','Register number','text'],['email','Email','email'],['phone','Phone','tel'],['allowance','Monthly allowance (₹)','number'],['openingBalance','Opening balance (₹)','number'],['mentor','Faculty mentor','text']]
+      .map(([k, l, t]) => `<div class="field"><label>${l}</label><input data-pf="${k}" type="${t}" value="${esc(st[k] ?? '')}"></div>`).join('')}
+    <div class="field"><label>Branch</label><select data-pf="branch">${['CSE','IT','AI&DS','ECE','EEE','AEI','Mechanical','Civil','Other'].map(b => `<option ${st.branch === b ? 'selected' : ''}>${b}</option>`).join('')}</select></div>
+    <div class="field"><label>Year</label><select data-pf="year">${[1,2,3,4].map(y => `<option value="${y}" ${+st.year === y ? 'selected' : ''}>Year ${y}</option>`).join('')}</select></div>
+    <div class="field"><label>Residence</label><select data-pf="residence">${['Hostel','Day scholar','Paying guest'].map(b => `<option ${st.residence === b ? 'selected' : ''}>${b}</option>`).join('')}</select></div>
+  </div>
+  <h3 style="margin-top:8px">More parameters</h3><p class="small muted">Add any extra details: scholarship scheme, part-time job, family income band, interests, bank, etc.</p>
+  <div id="customRows">${st.custom.map((c, i) => `<div class="row" style="margin-bottom:8px"><input data-ck="${i}" value="${esc(c.k)}" placeholder="Parameter" style="width:200px"><input data-cv="${i}" value="${esc(c.v)}" placeholder="Value" style="flex:1"><button class="btn sec sm" data-cdel="${i}">✕</button></div>`).join('')}</div>
+  <button class="btn sec sm" id="cAdd">+ Add parameter</button>`;
+}
+function bindProfile(st){
+  document.querySelectorAll('[data-pf]').forEach(i => i.onchange = () => { const k = i.dataset.pf; st[k] = ['allowance','openingBalance','year'].includes(k) ? +i.value : i.value; save(); });
+  document.querySelectorAll('[data-ck]').forEach(i => i.onchange = () => { st.custom[+i.dataset.ck].k = i.value; save(); });
+  document.querySelectorAll('[data-cv]').forEach(i => i.onchange = () => { st.custom[+i.dataset.cv].v = i.value; save(); });
+  document.querySelectorAll('[data-cdel]').forEach(b => b.onclick = () => { st.custom.splice(+b.dataset.cdel, 1); save(); render(); });
+  $('#cAdd').onclick = () => { st.custom.push({k:'', v:''}); save(); render(); };
+}
+function vProfile(){
+  const st = cur();
+  $('#main').innerHTML = `<h1>👤 My Profile</h1><p class="sub">Changes save automatically.</p>
+    <div class="card" style="margin-bottom:16px">${profileForm(st)}</div>
+    <div class="grid g2">
+      <div class="card"><h2>New student on this device</h2><div class="row"><input id="npName" placeholder="Student name" style="flex:1"><button class="btn" id="npAdd">Create profile</button></div></div>
+      <div class="card"><h2>Groq AI settings (for the mentor)</h2>
+        <div class="field"><label>Groq API key (kept only in this browser session, never saved)</label><input id="gk" type="password" value="${esc(S.groq.key)}" placeholder="gsk_…"></div>
+        <div class="field"><label>Model</label><input id="gm" value="${esc(S.groq.model)}"></div>
+        <p class="small muted">For the hackathon demo only. In production the key sits in a server function, not the browser. Groq calls work when this page is opened as a file or hosted on your own site; the claude.ai preview blocks outside calls, so the built-in mentor answers there.</p>
+        <button class="btn sec sm" id="gSave">Save AI settings</button></div></div>`;
+  bindProfile(st);
+  $('#npAdd').onclick = () => { const n = $('#npName').value.trim(); if (!n) return toast('Enter a name'); const s = makeStudent({name:n}); S.students.push(s); S.currentId = s.id; save(); toast('Profile created'); render(); };
+  $('#gSave').onclick = () => { S.groq.key = $('#gk').value.trim(); S.groq.model = $('#gm').value.trim() || 'llama-3.3-70b-versatile'; save(); toast('AI settings saved'); };
+}
+
+// =========================================================
+// TEACHER VIEWS – monitor, advise, close the loop
+// =========================================================
+function vClass(){
+  const rows = S.students.map(st => ({st, A:analyze(st)})).sort((a, b) => a.A.health - b.A.health);
+  const atRisk = rows.filter(r => r.A.health < 50).length, attn = rows.filter(r => r.A.health >= 50 && r.A.health < 70).length;
+  const avg = rows.length ? Math.round(rows.reduce((a, r) => a + r.A.health, 0) / rows.length) : 0;
+  const openCh = S.students.reduce((a, s) => a + s.inbox.filter(m => m.status === 'open').length, 0);
+  const doneCh = S.students.reduce((a, s) => a + s.inbox.filter(m => m.status === 'done').length, 0);
+  $('#main').innerHTML = `<h1>Class Monitor</h1><p class="sub">Every student's financial behaviour at a glance, riskiest first. Click a row to open advice and send a message.</p>
+    <div class="grid g4" style="margin-bottom:16px">
+      <div class="card stat"><div class="l">Average Money Health</div><div class="v">${avg}/100</div></div>
+      <div class="card stat"><div class="l">At risk (&lt;50)</div><div class="v" style="color:var(--coral)">${atRisk}</div></div>
+      <div class="card stat"><div class="l">Need attention (50–69)</div><div class="v" style="color:var(--amber)">${attn}</div></div>
+      <div class="card stat"><div class="l">Messages open / completed</div><div class="v">${openCh} / ${doneCh}</div></div></div>
+    <div class="card"><div style="overflow-x:auto"><table><tr><th>Student</th><th>Branch · Year</th><th>Health</th><th>Balance</th><th>Saving rate</th><th>Wants share</th><th>Flags</th><th>Last active</th></tr>
+      ${rows.map(({st, A}) => { const flags = [];
+        if (A.impulse > .4) flags.push('<span class="tag t-want">High wants</span>');
+        if (A.bnpl) flags.push('<span class="tag t-bad">BNPL</span>');
+        if (A.over.length) flags.push(`<span class="tag t-want">${A.over.length} over budget</span>`);
+        if (A.balance < 1000) flags.push('<span class="tag t-bad">Low balance</span>');
+        if ((st.games.scam ?? 0) < 60) flags.push('<span class="tag t-vio">Scam risk</span>');
+        if (A.daysIdle > 6) flags.push('<span class="tag t-vio">Inactive</span>');
+        return `<tr class="click" data-open="${st.id}"><td><b>${esc(st.name)}</b><div class="small muted">${esc(st.regNo)}</div></td><td>${esc(st.branch)} · Y${st.year}</td>
+          <td><span class="tag ${A.health >= 70 ? 't-ok' : A.health >= 50 ? 't-want' : 't-bad'}">${A.health}</span></td><td>${inr(A.balance)}</td>
+          <td>${Math.round(A.savingsRate*100)}%</td><td>${Math.round(A.impulse*100)}%</td><td>${flags.join(' ') || '<span class="tag t-ok">OK</span>'}</td><td class="small">${A.daysIdle === 0 ? 'today' : A.daysIdle + ' days ago'}</td></tr>`; }).join('')}
+    </table></div></div>
+    <div class="card" style="margin-top:16px"><h2>Class-wide spending this month (anonymised)</h2>${(() => { const tot = {};
+      S.students.forEach(st => Object.entries(analyze(st).byCat).forEach(([c, v]) => tot[c] = (tot[c] || 0) + v));
+      return hBars(Object.entries(tot).map(([c, v]) => ({label:OUT_CATS[c]?.label || c, v})).sort((a, b) => b.v - a.v), '#6c63ff'); })()}</div>`;
+  document.querySelectorAll('[data-open]').forEach(r => r.onclick = () => { S.selectedId = r.dataset.open; S.teacherTab = 'student'; save(); render(); });
+}
+function vStudentDetail(){
+  const st = S.students.find(s => s.id === S.selectedId) || S.students[0];
+  if (!st){ $('#main').innerHTML = '<p>No students yet.</p>'; return; }
+  S.selectedId = st.id;
+  const A = analyze(st), adv = adviceFor(st, A), al = alertsFor(st, A);
+  $('#main').innerHTML = `<div class="row"><h1 class="grow">${esc(st.name)}</h1>
+      <select id="pick">${S.students.map(s => `<option value="${s.id}" ${s.id === st.id ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select>
+      <button class="btn sec sm" id="asStu">View as student</button></div>
+    <p class="sub">${esc(st.regNo)} · ${esc(st.branch)} · Year ${st.year} · ${esc(st.residence)} · Allowance ${inr(st.allowance)}/month ${st.custom.filter(c => c.k).map(c => ` · ${esc(c.k)}: ${esc(c.v)}`).join('')}</p>
+    <div class="grid g4" style="margin-bottom:16px">
+      <div class="card stat"><div class="l">Money Health</div><div class="v" style="color:${A.health >= 70 ? 'var(--mint)' : A.health >= 50 ? 'var(--amber)' : 'var(--coral)'}">${A.health}/100</div></div>
+      <div class="card stat"><div class="l">Balance</div><div class="v">${inr(A.balance)}</div></div>
+      <div class="card stat"><div class="l">This month in / out</div><div class="v" style="font-size:22px">${inr(A.mIn)} / ${inr(A.mOut)}</div></div>
+      <div class="card stat"><div class="l">XP · Level</div><div class="v">${st.xp} · Lv ${level(st.xp).n}</div></div></div>
+    <div class="grid g2">
+      <div class="card"><h2>🤖 Suggested advice (auto-generated)</h2>
+        ${adv.map((a, i) => `<div class="alert info"><div class="ic">💡</div><div class="grow small">${esc(a)}</div><button class="btn sec sm" data-use="${i}">Use</button></div>`).join('')}
+        <h2 style="margin-top:16px">Send to student</h2>
+        <div class="field"><label>Message type</label><select id="mType"><option value="advice">Advice / note</option><option value="challenge">Challenge</option></select></div>
+        <div class="field" id="chWrap" style="display:none"><label>Pick a challenge</label><select id="chSel">${CHALLENGES.map(c => `<option>${c}</option>`).join('')}</select></div>
+        <div class="field"><label>Message</label><textarea id="mText" rows="3" style="width:100%" placeholder="Write advice for the student…"></textarea></div>
+        <button class="btn" id="mSend">Send to ${esc(st.name.split(' ')[0])}</button></div>
+      <div class="card"><h2>Risk Radar</h2>${radar(A.scores, 300)}</div>
+      <div class="card"><h2>Spending this month</h2>${hBars(A.cats)}</div>
+      <div class="card"><h2>Alerts the student sees</h2>${al.map(a => `<div class="alert ${a.lvl}"><div class="ic">${a.ic}</div><div class="small"><b>${esc(a.t)}</b><br>${esc(a.d)}</div></div>`).join('')}</div>
+      <div class="card"><h2>Messages and challenges (the loop)</h2>
+        ${st.inbox.length ? `<table class="small"><tr><th>Sent</th><th>Type</th><th>Message</th><th>Status</th></tr>${st.inbox.slice().reverse().map(m => `<tr><td>${m.date}</td><td>${m.type}</td><td>${esc(m.text)}</td>
+          <td>${m.status === 'done' ? `<span class="tag t-ok">✔ ${m.type === 'challenge' ? 'completed' : 'read'} ${m.doneOn || ''}</span>` : '<span class="tag t-want">open</span>'}</td></tr>`).join('')}</table>` : '<p class="muted small">Nothing sent yet.</p>'}</div>
+      <div class="card"><h2>Learning and games</h2><table class="small">
+        <tr><td>Scam Spotter</td><td>${st.games.scam ?? '–'}${st.games.scam != null ? '%' : ''}</td></tr><tr><td>Needs vs Wants test</td><td>${st.games.needwant ?? '–'}${st.games.needwant != null ? '%' : ''}</td></tr>
+        <tr><td>Mini quiz</td><td>${st.games.quiz ?? '–'}${st.games.quiz != null ? '%' : ''}</td></tr><tr><td>Swipe or Skip (best saved)</td><td>${st.games.swipe != null ? inr(st.games.swipe) : '–'}</td></tr>
+        <tr><td>Now or Later</td><td>${st.games.nowlater != null ? st.games.nowlater + '/5' : '–'}</td></tr></table>
+        <h3 style="margin-top:12px">Goals</h3>${st.goals.map(g => `<div class="small">${esc(g.name)}: ${inr(g.saved)} / ${inr(g.target)}</div>`).join('') || '<div class="small muted">No goals.</div>'}</div>
+    </div>`;
+  $('#pick').onchange = e => { S.selectedId = e.target.value; save(); render(); };
+  $('#asStu').onclick = () => { S.currentId = st.id; S.role = 'student'; S.tab = 'dashboard'; save(); render(); };
+  $('#mType').onchange = () => { $('#chWrap').style.display = $('#mType').value === 'challenge' ? 'block' : 'none'; if ($('#mType').value === 'challenge') $('#mText').value = $('#chSel').value; };
+  $('#chSel').onchange = () => $('#mText').value = $('#chSel').value;
+  document.querySelectorAll('[data-use]').forEach(b => b.onclick = () => { $('#mText').value = adv[+b.dataset.use]; $('#mType').value = 'advice'; $('#chWrap').style.display = 'none'; });
+  $('#mSend').onclick = () => { const t = $('#mText').value.trim(); if (!t) return toast('Write a message first');
+    st.inbox.push({id:uid(), type:$('#mType').value, text:t, date:iso(today), status:'open', from:S.teacher.name}); save(); toast('Sent. The student sees it on their dashboard.'); render(); };
+}
+function vAddStudent(){
+  const draft = makeStudent({name:''});
+  $('#main').innerHTML = `<h1>Add Student</h1><p class="sub">Enter the student's details and any extra parameters. The student can log in and continue from "Student" view.</p>
+    <div class="card">${profileForm(draft, true)}
+      <div class="row" style="margin-top:16px"><label style="display:flex;gap:8px;align-items:center;margin:0"><input type="checkbox" id="seedIt" checked> Fill with 8 months of sample transactions (for demo)</label>
+      <span class="grow"></span><button class="btn" id="saveNew">Save student</button></div></div>`;
+  window._draft = draft; bindProfile(draft);
+  $('#cAdd').onclick = () => { draft.custom.push({k:'', v:''}); const box = $('#customRows'); const i = draft.custom.length - 1;
+    box.insertAdjacentHTML('beforeend', `<div class="row" style="margin-bottom:8px"><input data-ck="${i}" placeholder="Parameter" style="width:200px"><input data-cv="${i}" placeholder="Value" style="flex:1"></div>`);
+    box.querySelector(`[data-ck="${i}"]`).onchange = e => draft.custom[i].k = e.target.value; box.querySelector(`[data-cv="${i}"]`).onchange = e => draft.custom[i].v = e.target.value; };
+  $('#saveNew').onclick = () => {
+    document.querySelectorAll('[data-pf]').forEach(i => { const k = i.dataset.pf; draft[k] = ['allowance','openingBalance','year'].includes(k) ? +i.value : i.value; });
+    if (!draft.name.trim()) return toast('Enter the student name');
+    draft.custom = draft.custom.filter(c => c.k);
+    if ($('#seedIt').checked) draft.txns = seedTxns({seed:Math.floor(Math.random() * 1000), allowance:draft.allowance || 7000, deliveryPerMonth:5, shopping:800, fun:700, bnpl:0});
+    S.students.push(draft); S.selectedId = draft.id; S.teacherTab = 'student'; save(); toast('Student added'); render(); };
+}
+function vTSettings(){
+  $('#main').innerHTML = `<h1>Mentor Settings</h1><div class="card"><div class="field"><label>Mentor name</label><input id="tn" value="${esc(S.teacher.name)}"></div>
+    <button class="btn" id="tsave">Save</button>
+    <p class="small muted" style="margin-top:16px">Data in this demo stays in this browser. In the full version, students and mentors sign in with RSET accounts and data is stored in Supabase with row-level security, so a mentor sees only their own mentees.</p></div>`;
+  $('#tsave').onclick = () => { S.teacher.name = $('#tn').value || 'Mentor'; save(); toast('Saved'); render(); };
+}
+
+render();
+</script>
+</body>
+</html>
